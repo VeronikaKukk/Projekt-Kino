@@ -9,12 +9,14 @@ GRID_WIDTH = HEIGHT // GRIDSIZE
 GRID_HEIGHT = WIDTH // GRIDSIZE
 
 FPS = 60 #kui kiirelt mäng updateb pilti
-VEL = 3 #kui kiirelt hiir liigub
 
 KASS_IMAGE = pygame.image.load(os.path.join("kass.png"))
 KASS = pygame.transform.scale(KASS_IMAGE,(50,50))#kassi suurus
 HIIR_IMAGE = pygame.image.load(os.path.join("hiir.png"))
 HIIR = pygame.transform.scale(HIIR_IMAGE,(25,25))#hiire suurus
+JUUST_IMAGE = pygame.image.load(os.path.join("juust.png"))
+JUUST = pygame.transform.scale(JUUST_IMAGE,(25,25))
+
 
 def drawGrid(WIN):#mõmsu koodist
     for y in range(0, GRID_HEIGHT):
@@ -46,15 +48,24 @@ def kassi_liigutamine(keys_pressed,kass):
     if keys_pressed[pygame.K_DOWN] and kass.y + 1 + 50 < HEIGHT: #alla
         kass.y += 1
 
-def draw_window(hiir,kass):
+def draw_window(hiir,kass,juust):
     drawGrid(WIN)
+    WIN.blit(JUUST,juust)
     WIN.blit(KASS,kass)
     WIN.blit(HIIR,hiir)
     pygame.display.update()#peale muutust pead updatema, muidu ei muuda ekraani sisu
 
+def kas_püütud(hiir,kass):
+    return pygame.Rect.colliderect(hiir,kass)
+
+def kas_juust(hiir,juust):
+    return pygame.Rect.colliderect(hiir,juust)
+
 def main():
-    hiir = pygame.Rect(100, 300, 25, 25)#ristkülik, milles on pilt ja saab lugeda koordinaate
+    hiir = pygame.Rect(300, 100, 25, 25)#ristkülik, milles on pilt ja saab lugeda koordinaate
     kass = pygame.Rect(300, 100, 50, 50)
+    juust = pygame.Rect(0,0,25,25)
+    
     clock = pygame.time.Clock()
     run = True
     while run:
@@ -65,9 +76,15 @@ def main():
                 run = False
         
         keys_pressed = pygame.key.get_pressed()#ütleb, mis nupud praegu vajutatud
+        if kas_püütud(hiir,kass) == True:
+            print("Söödud")
+        else:
+            print("Ei ole söödud")
+        if kas_juust(hiir,juust) == True:
+            print("Oled juustu peal")
         hiire_liigutamine(keys_pressed,hiir)
         kassi_liigutamine(keys_pressed,kass)
-        draw_window(hiir,kass)
+        draw_window(hiir,kass,juust)
     
     pygame.quit()
 
