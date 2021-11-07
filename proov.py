@@ -1,5 +1,9 @@
 import pygame
 import os
+import random
+import sys
+
+pygame.init()
 #https://www.youtube.com/watch?v=jO6qQDNa2UY õpetus siit
 WIDTH, HEIGHT = 500,500 #akna suurus
 WIN = pygame.display.set_mode((WIDTH,HEIGHT))#teeb akna nende suurustega
@@ -7,6 +11,8 @@ pygame.display.set_caption("Kass ja hiir")#lehe pealkiri
 GRIDSIZE = 25
 GRID_WIDTH = HEIGHT // GRIDSIZE
 GRID_HEIGHT = WIDTH // GRIDSIZE
+
+meiefont = pygame.font.SysFont("impact",16) #skoori lugeja font
 
 FPS = 60 #kui kiirelt mäng updateb pilti
 
@@ -18,9 +24,9 @@ HIIR = pygame.transform.scale(HIIR_IMAGE,(25,25))#hiire suurus
 
 #hiire suunad
 HIIR_PAREM = pygame.transform.rotate(HIIR, 0)
-HIIR_VASAK = pygame.transform.rotate(HIIR, 180)
-HIIR_ALLA = pygame.transform.rotate(HIIR, 90)
-HIIR_ÜLES = pygame.transform.rotate(HIIR, 270)
+HIIR_VASAK = pygame.transform.flip(HIIR, True, False)
+HIIR_ALLA = pygame.transform.flip(pygame.transform.rotate(HIIR, 90), False, True)
+HIIR_ÜLES = pygame.transform.rotate(HIIR, 90)
 
 
 JUUST_IMAGE = pygame.image.load(os.path.join("juust.png"))
@@ -39,7 +45,7 @@ def drawGrid(WIN):#mõmsu koodist
 
 # def kassi_liigutamine(keys_pressed,kass):
 
-def draw_window(hiir,kass,juust,lastKey):
+def draw_window(hiir,kass,juust,lastKey,counter):
     drawGrid(WIN)
     if lastKey == pygame.K_a:
         WIN.blit(HIIR_VASAK,hiir)
@@ -49,9 +55,10 @@ def draw_window(hiir,kass,juust,lastKey):
         WIN.blit(HIIR_ÜLES,hiir)
     elif lastKey == pygame.K_s:
         WIN.blit(HIIR_ALLA,hiir)
+    
     WIN.blit(JUUST,juust)
     WIN.blit(KASS,kass)
-    
+    WIN.blit(counter,(5,10))
     pygame.display.update()#peale muutust pead updatema, muidu ei muuda ekraani sisu
 
 # def kas_püütud(hiir,kass):
@@ -63,14 +70,21 @@ def draw_window(hiir,kass,juust,lastKey):
 def main():
     hiir = pygame.Rect(300, 100, 25, 25)#ristkülik, milles on pilt ja saab lugeda koordinaate
     kass = pygame.Rect(300, 100, 50, 50)
-    juust = pygame.Rect(0,0,25,25)
-    lastKey = 0
+    juust = pygame.Rect(random.randrange(0,WIDTH, 25),random.randrange(0, HEIGHT, 25),25,25) #suvaline juustu asukoht
+    skoor = 0
     
+    lastKey = 0 #viimati vajutatud nupp
     clock = pygame.time.Clock()
+    
     
     run = True
     while run:
         clock.tick(10)
+        if hiir.x == juust.x and hiir.y == juust.y:
+            juust = juust = pygame.Rect(random.randrange(0,WIDTH, 25),random.randrange(0, HEIGHT, 25),25,25)
+            skoor += 1
+            
+
         for event in pygame.event.get():
             #kontrollid, mis eventid olid
             if event.type == pygame.QUIT:
@@ -85,9 +99,15 @@ def main():
             hiir.y -= 25
         if lastKey == pygame.K_s and hiir.y + 25 < HEIGHT: #alla
             hiir.y += 25
+        
+        
+        
+        
+        pygame.display.update()
 
 #         kassi_liigutamine(keys_pressed,kass)
-        draw_window(hiir,kass,juust,lastKey)
+        counter = meiefont.render("Skoor: {0}".format(skoor),1,(0,0,0)) #skoori lugeja
+        draw_window(hiir,kass,juust,lastKey,counter)
     
     pygame.quit()
 
