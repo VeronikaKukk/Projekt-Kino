@@ -28,38 +28,20 @@ def drawGrid(WIN):#mõmsu koodist
                 rr = pygame.Rect((x*GRIDSIZE,y*GRIDSIZE),(GRIDSIZE,GRIDSIZE))
                 pygame.draw.rect(WIN,(236,183,83),rr)
 
-def hiire_liigutamine(keys_pressed,hiir):
-    if keys_pressed[pygame.K_a] and hiir.x - 1 > 0: #vasak
-        hiir.x -= 1
-    if keys_pressed[pygame.K_d] and hiir.x + 1 + 25 < WIDTH: #parem
-        hiir.x += 1
-    if keys_pressed[pygame.K_w] and hiir.y - 1 > 0: #üles
-        hiir.y -= 1
-    if keys_pressed[pygame.K_s] and hiir.y + 1 + 25 < HEIGHT: #alla
-        hiir.y += 1
-
-def kassi_liigutamine(keys_pressed,kass):
-    if keys_pressed[pygame.K_LEFT] and kass.x -1 > 0: #vasak
-        kass.x -= 1
-    if keys_pressed[pygame.K_RIGHT] and kass.x + 1 + 50 < WIDTH: #parem
-        kass.x += 1
-    if keys_pressed[pygame.K_UP] and kass.y - 1 > 0: #üles
-        kass.y -= 1
-    if keys_pressed[pygame.K_DOWN] and kass.y + 1 + 50 < HEIGHT: #alla
-        kass.y += 1
+# def kassi_liigutamine(keys_pressed,kass):
 
 def draw_window(hiir,kass,juust):
     drawGrid(WIN)
     WIN.blit(JUUST,juust)
-    WIN.blit(KASS,kass)
     WIN.blit(HIIR,hiir)
+    WIN.blit(KASS,kass)
     pygame.display.update()#peale muutust pead updatema, muidu ei muuda ekraani sisu
 
-def kas_püütud(hiir,kass):
-    return pygame.Rect.colliderect(hiir,kass)
-
-def kas_juust(hiir,juust):
-    return pygame.Rect.colliderect(hiir,juust)
+# def kas_püütud(hiir,kass):
+#     return pygame.Rect.colliderect(hiir,kass)
+# 
+# def kas_juust(hiir,juust):
+#     return pygame.Rect.colliderect(hiir,juust)
 
 def main():
     hiir = pygame.Rect(300, 100, 25, 25)#ristkülik, milles on pilt ja saab lugeda koordinaate
@@ -74,16 +56,17 @@ def main():
             #kontrollid, mis eventid olid
             if event.type == pygame.QUIT:
                 run = False
-        
-        keys_pressed = pygame.key.get_pressed()#ütleb, mis nupud praegu vajutatud
-        if kas_püütud(hiir,kass) == True:
-            print("Söödud")
-        else:
-            print("Ei ole söödud")
-        if kas_juust(hiir,juust) == True:
-            print("Oled juustu peal")
-        hiire_liigutamine(keys_pressed,hiir)
-        kassi_liigutamine(keys_pressed,kass)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_a and hiir.x - 25 >= 0: #vasak
+                    hiir.x -= 25
+                if event.key ==pygame.K_d and hiir.x + 25 < WIDTH: #parem
+                    hiir.x += 25
+                if event.key ==pygame.K_w and hiir.y - 25 >= 0: #üles
+                    hiir.y -= 25
+                if event.key ==pygame.K_s and hiir.y + 25 < HEIGHT: #alla
+                    hiir.y += 25
+
+#         kassi_liigutamine(keys_pressed,kass)
         draw_window(hiir,kass,juust)
     
     pygame.quit()
