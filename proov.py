@@ -29,6 +29,10 @@ HIIR_VASAK = pygame.transform.flip(HIIR, True, False)
 HIIR_ALLA = pygame.transform.flip(pygame.transform.rotate(HIIR, 90), False, True)
 HIIR_ÜLES = pygame.transform.rotate(HIIR, 90)
 
+#heli saadud siit lehelt https://mixkit.co/
+JUUSTU_HELI = pygame.mixer.Sound(os.path.join("juustuheli.wav"))
+MANGULOPP_HELI = pygame.mixer.Sound(os.path.join("mangulopp.wav"))
+
 JUUST_IMAGE = pygame.image.load(os.path.join("juust.png"))
 JUUST = pygame.transform.scale(JUUST_IMAGE,(25,25))#juustu suurus
 
@@ -72,6 +76,7 @@ def draw_window(hiir,kass,juust,lastKey,counter):
 
 def kas_püütud(hiir,kass):
     if pygame.Rect.colliderect(hiir,kass) == True:
+        MANGULOPP_HELI.play()
         return False
     else:
         return True
@@ -85,6 +90,7 @@ skoor = 0
 run = True
 while run:
     if hiir.x == juust.x and hiir.y == juust.y:
+        JUUSTU_HELI.play()
         juust = juust = pygame.Rect(random.randrange(0,WIDTH, 25),random.randrange(0, HEIGHT, 25),25,25)
         skoor += 1
     
