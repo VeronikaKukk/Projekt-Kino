@@ -61,6 +61,8 @@ def draw_window(hiir,kass,juust,lastKey,counter):
     drawGrid(WIN)
     WIN.blit(JUUST,juust)
     #hiire pildi pööramine
+    if lastKey == 0:
+        WIN.blit(HIIR_PAREM,hiir)
     if lastKey == pygame.K_a:
         WIN.blit(HIIR_VASAK,hiir)
     elif lastKey == pygame.K_d:
@@ -81,19 +83,24 @@ def kas_püütud(hiir,kass):
     else:
         return True
 
-hiir = pygame.Rect(200, 100, 25, 25)#ristkülik, milles on pilt ja saab lugeda koordinaate
-kass = pygame.Rect(300, 100, 50, 50)
+hiir = pygame.Rect(50, 50, 25, 25)#ristkülik, milles on pilt ja saab lugeda koordinaate
+kass = pygame.Rect(475, 475, 50, 50)
 juust = pygame.Rect(random.randrange(0,WIDTH, 25),random.randrange(0, HEIGHT, 25),25,25) #suvaline juustu asukoht
 clock = pygame.time.Clock()
 skoor = 0
-
+counter = meiefont_tekst.render("Skoor: {0}/20".format(skoor),1,(0,0,0)) #skoori lugeja
+lastKey = 0
+draw_window(hiir,kass,juust,lastKey,counter)
 run = True
 while run:
-    if hiir.x == juust.x and hiir.y == juust.y:
+    
+    #juustu kogumine
+    if hiir.x == juust.x and hiir.y == juust.y: 
         JUUSTU_HELI.play()
         juust = juust = pygame.Rect(random.randrange(0,WIDTH, 25),random.randrange(0, HEIGHT, 25),25,25)
         skoor += 1
     
+
     for event in pygame.event.get():
         #kontrollid, mis eventid olid
         if event.type == pygame.QUIT:
@@ -105,9 +112,24 @@ while run:
         else:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 game_active = True
-                hiir = pygame.Rect(200, 100, 25, 25)
+                hiir = pygame.Rect(50, 50, 25, 25)#ristkülik, milles on pilt ja saab lugeda koordinaate
+                kass = pygame.Rect(475, 475, 50, 50)
                 skoor = 0
                 lastKey = 0 #viimati vajutatud nupp
+    #kassi liikumine    
+    if game_active:
+        x1 = hiir.x - kass.x
+        y1 = hiir.y - kass.y
+        if abs(x1) >= abs(y1):
+            if x1 > 0 and kass.x + 12.5 < WIDTH:
+                kass.x += 12.5
+            elif x1 < 0 and kass.x - 12.5 >= 0:
+                kass.x -= 12.5
+        else:
+            if y1 > 0 and kass.y + 12.5 < HEIGHT:
+                kass.y += 12.5
+            elif y1 < 0 and kass.y - 12.5 >= 0:
+                kass.y -= 12.5
     #hiire liikumine
     if game_active:
         if lastKey == pygame.K_a and hiir.x - 25 >= 0: #vasak
@@ -119,7 +141,7 @@ while run:
         if lastKey == pygame.K_s and hiir.y + 25 < HEIGHT: #alla
             hiir.y += 25
         
-        counter = meiefont_tekst.render("Skoor: {0}".format(skoor),1,(0,0,0)) #skoori lugeja
+        counter = meiefont_tekst.render("Skoor: {0}/20".format(skoor),1,(0,0,0)) #skoori lugeja
         draw_window(hiir,kass,juust,lastKey,counter)#joonista aknasse
         game_active = kas_püütud(hiir,kass) #kui kass puudutab hiirt, siis game_active on false   
     
@@ -131,6 +153,7 @@ while run:
         WIN.blit(intro_pilt,intro_pilt_rect)
         if skoor == 0:
             WIN.blit(algus_tekst, algus)
+        
         else:
             WIN.blit(skoori_näit_tekst,skoori_näit)
     pygame.display.update()
