@@ -24,10 +24,10 @@ HIIR_IMAGE = pygame.image.load(os.path.join("hiir.png"))#pilt pole enda tehtud a
 HIIR = pygame.transform.scale(HIIR_IMAGE,(35,35))#hiire suurus
 
 #hiire suunad
-HIIR_PAREM = pygame.transform.rotate(HIIR, 0)
-HIIR_VASAK = pygame.transform.flip(HIIR, True, False)
-HIIR_ALLA = pygame.transform.flip(pygame.transform.rotate(HIIR, 90), False, True)
-HIIR_ÜLES = pygame.transform.rotate(HIIR, 90)
+HIIR_PAREM = pygame.transform.rotate(HIIR, -90)
+HIIR_VASAK = pygame.transform.rotate(HIIR, 90)
+HIIR_ALLA = pygame.transform.flip(HIIR, False, True)
+HIIR_ÜLES = pygame.transform.rotate(HIIR, 0)
 
 #heli saadud siit lehelt https://mixkit.co/
 JUUSTU_HELI = pygame.mixer.Sound(os.path.join("juustuheli.wav"))
