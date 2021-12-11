@@ -129,11 +129,11 @@ while run:
                     lastKey = event.key
         else:
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_0:
+                if event.key == pygame.K_0 or event.key == pygame.K_KP0:
                     keerukus = 13
-                if event.key == pygame.K_1:
+                if event.key == pygame.K_1 or event.key == pygame.K_KP1:
                     keerukus = 17.5
-                if event.key == pygame.K_2:
+                if event.key == pygame.K_2 or event.key == pygame.K_KP2:
                     keerukus = 22
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 game_active = True
@@ -209,11 +209,11 @@ while run:
             WIN.blit(raskusaste_tekst,raskusaste)
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_0:
+                    if event.key == pygame.K_0 or event.key == pygame.K_KP0:
                         keerukus = 13
-                    if event.key == pygame.K_1:
+                    if event.key == pygame.K_1 or event.key == pygame.K_KP1:
                         keerukus = 17.5
-                    if event.key == pygame.K_2:
+                    if event.key == pygame.K_2 or event.key == pygame.K_KP2:
                         keerukus = 22
             
     pygame.display.update()
