@@ -28,12 +28,17 @@ HIIR_VASAK = pygame.transform.rotate(HIIR, 90)
 HIIR_ALLA = pygame.transform.flip(HIIR, False, True)
 HIIR_ÜLES = pygame.transform.rotate(HIIR, 0)
 
-#heli saadud siit lehelt https://mixkit.co/
+#heli 
+#juustu ja mängulõpu heli saadud siit lehelt https://mixkit.co/
 JUUSTU_HELI = pygame.mixer.Sound(os.path.join("juustuheli.wav"))
 MANGULOPP_HELI = pygame.mixer.Sound(os.path.join("mangulopp.wav"))
+# taustamuusika tehtud siin https://www.beepbox.co/
+pygame.mixer.music.load("muusika.wav")
+pygame.mixer.music.play(-1)
 
 #font
-meiefont_tekst = pygame.font.SysFont("impact", 16) 
+meiefont_tekst = pygame.font.SysFont("impact", 16)
+meiefont_pikktekst = pygame.font.SysFont("impact", 22) 
 meiefont_kiri = pygame.font.SysFont("impact", 30)
 meiefont_pealkiri = pygame.font.SysFont("impact", 35)
 
@@ -44,13 +49,10 @@ start_tekst = meiefont_kiri.render(" Start ", 1,(255, 255, 255),(80, 79, 84))
 start = start_tekst.get_rect(center=(280, 260))
 howtoplay_tekst = meiefont_kiri.render(" Mängujuhend ", 1,(255, 255, 255),(80, 79, 84))
 howtoplay = howtoplay_tekst.get_rect(center=(280, 350))
-raskusaste_tekst = meiefont_tekst.render(" Keerukus: Vajuta 0- kerge, 1- keskmine, 2- raske ",1,(255,255,255),(80,79,84))
+raskusaste_tekst = meiefont_pikktekst.render(" Keerukus: Vajuta 0- kerge, 1- keskmine, 2- raske ",1,(255,255,255),(80,79,84))
 raskusaste = raskusaste_tekst.get_rect(center=(280, 440))
 gameover_tekst = meiefont_kiri.render(" Uuesti mängimiseks vajuta tühikut ", 1,(255, 255, 255),(80, 79, 84))
 gameover = gameover_tekst.get_rect(center=(280, 330))
-
-intro_pilt = pygame.image.load(os.path.join("taust.png"))
-intro_pilt_rect = intro_pilt.get_rect(center=(280, 280))
 
 juhendid1_tekst = meiefont_kiri.render("Liigu nuppudega WASD.", 1,(255, 255, 255))
 juhendid2_tekst = meiefont_kiri.render("Kogu juustu ja hoia kassist eemale.", 1,(255, 255, 255))
@@ -58,6 +60,9 @@ juhendid3_tekst = meiefont_kiri.render(" tagasi: vajuta x", 1,(255, 255, 255))
 juhendid1 = juhendid1_tekst.get_rect(center=(280, 320))
 juhendid2 = juhendid2_tekst.get_rect(center=(280, 360))
 juhendid3 = juhendid3_tekst.get_rect(center=(280, 400))
+
+intro_pilt = pygame.image.load(os.path.join("taust.png"))
+intro_pilt_rect = intro_pilt.get_rect(center=(280, 280))
 
 def drawGrid(WIN):
     for y in range(0, GRID_HEIGHT):
@@ -202,13 +207,14 @@ while run:
             WIN.blit(skoori_näit_tekst, skoori_näit)
             WIN.blit(gameover_tekst, gameover)
             WIN.blit(raskusaste_tekst,raskusaste)
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_0:
-                    keerukus = 13
-                if event.key == pygame.K_1:
-                    keerukus = 17.5
-                if event.key == pygame.K_2:
-                    keerukus = 22
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_0:
+                        keerukus = 13
+                    if event.key == pygame.K_1:
+                        keerukus = 17.5
+                    if event.key == pygame.K_2:
+                        keerukus = 22
             
     pygame.display.update()
     clock.tick(10)
