@@ -15,11 +15,11 @@ GRID_WIDTH = HEIGHT // GRIDSIZE
 GRID_HEIGHT = WIDTH // GRIDSIZE
 
 #pildid
-KASS_IMAGE = pygame.image.load(os.path.join("kass.png"))
+KASS_IMAGE = pygame.image.load(os.path.join("pildid/kass.png"))
 KASS = pygame.transform.scale(KASS_IMAGE,(70, 70))
-HIIR_IMAGE = pygame.image.load(os.path.join("hiir.png"))
+HIIR_IMAGE = pygame.image.load(os.path.join("pildid/hiir.png"))
 HIIR = pygame.transform.scale(HIIR_IMAGE,(35, 35))
-JUUST_IMAGE = pygame.image.load(os.path.join("juust.png"))
+JUUST_IMAGE = pygame.image.load(os.path.join("pildid/juust.png"))
 JUUST = pygame.transform.scale(JUUST_IMAGE,(35, 35))
 
 #hiire suunad
@@ -30,11 +30,13 @@ HIIR_ÜLES = pygame.transform.rotate(HIIR, 0)
 
 #heli 
 #juustu ja mängulõpu heli saadud siit lehelt https://mixkit.co/
-JUUSTU_HELI = pygame.mixer.Sound(os.path.join("juustuheli.wav"))
-MANGULOPP_HELI = pygame.mixer.Sound(os.path.join("mangulopp.wav"))
+JUUSTU_HELI = pygame.mixer.Sound(os.path.join("heli/juustuheli.wav"))
+MANGULOPP_HELI = pygame.mixer.Sound(os.path.join("heli/mangulopp.wav"))
 # taustamuusika tehtud siin https://www.beepbox.co/
-pygame.mixer.music.load("muusika.wav")
+pygame.mixer.music.load("heli/muusika.wav")
+pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1)
+
 
 #font
 meiefont_tekst = pygame.font.SysFont("impact", 16)
@@ -61,7 +63,7 @@ juhendid1 = juhendid1_tekst.get_rect(center=(280, 320))
 juhendid2 = juhendid2_tekst.get_rect(center=(280, 360))
 juhendid3 = juhendid3_tekst.get_rect(center=(280, 400))
 
-intro_pilt = pygame.image.load(os.path.join("taust.png"))
+intro_pilt = pygame.image.load(os.path.join("pildid/taust.png"))
 intro_pilt_rect = intro_pilt.get_rect(center=(280, 280))
 
 #funktsioonid
