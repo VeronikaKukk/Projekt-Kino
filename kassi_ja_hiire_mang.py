@@ -47,13 +47,13 @@ mängunimi_tekst = meiefont_pealkiri.render(" Projekt Kino: Kassi ja hiire mäng
 mängunimi = mängunimi_tekst.get_rect(center=(280, 100))
 start_tekst = meiefont_kiri.render(" Start ", 1,(255, 255, 255),(80, 79, 84))
 start = start_tekst.get_rect(center=(280, 260))
-howtoplay_tekst = meiefont_kiri.render(" Mängujuhend ", 1,(255, 255, 255),(80, 79, 84))
-howtoplay = howtoplay_tekst.get_rect(center=(280, 350))
 raskusaste_tekst = meiefont_pikktekst.render(" Keerukus: Vajuta 0- kerge, 1- keskmine, 2- raske ",1,(255,255,255),(80,79,84))
 raskusaste = raskusaste_tekst.get_rect(center=(280, 440))
 gameover_tekst = meiefont_kiri.render(" Uuesti mängimiseks vajuta tühikut ", 1,(255, 255, 255),(80, 79, 84))
 gameover = gameover_tekst.get_rect(center=(280, 330))
 
+howtoplay_tekst = meiefont_kiri.render(" Mängujuhend ", 1,(255, 255, 255),(80, 79, 84))
+howtoplay = howtoplay_tekst.get_rect(center=(280, 350))
 juhendid1_tekst = meiefont_kiri.render("Liigu nuppudega WASD.", 1,(255, 255, 255))
 juhendid2_tekst = meiefont_kiri.render("Kogu juustu ja hoia kassist eemale.", 1,(255, 255, 255))
 juhendid3_tekst = meiefont_kiri.render(" tagasi: vajuta x", 1,(255, 255, 255))
@@ -64,6 +64,7 @@ juhendid3 = juhendid3_tekst.get_rect(center=(280, 400))
 intro_pilt = pygame.image.load(os.path.join("taust.png"))
 intro_pilt_rect = intro_pilt.get_rect(center=(280, 280))
 
+#funktsioonid
 def drawGrid(WIN):
     for y in range(0, GRID_HEIGHT):
         for x in range(0, GRID_WIDTH):
@@ -128,6 +129,7 @@ while run:
                 if event.key == pygame.K_a or event.key == pygame.K_s or event.key == pygame.K_w or event.key == pygame.K_d:
                     lastKey = event.key
         else:
+            #keerukus
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_0 or event.key == pygame.K_KP0:
                     keerukus = 13
@@ -135,14 +137,26 @@ while run:
                     keerukus = 17.5
                 if event.key == pygame.K_2 or event.key == pygame.K_KP2:
                     keerukus = 22
+            #mängu algus
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 game_active = True
                 hiir = pygame.Rect(70, 70, 35, 35)
                 kass = pygame.Rect(490, 490, 70, 70)
                 skoor = 0
                 lastKey = 0
-    #kassi liikumine    
+     
     if game_active:
+        #hiire liikumine
+        if lastKey == pygame.K_a and hiir.x - 35 >= 0: #vasak
+            hiir.x -= 35
+        if lastKey == pygame.K_d and hiir.x + 35 < WIDTH: #parem
+            hiir.x += 35
+        if lastKey == pygame.K_w and hiir.y - 35 >= 0: #üles
+            hiir.y -= 35
+        if lastKey == pygame.K_s and hiir.y + 35 < HEIGHT: #alla
+            hiir.y += 35
+        
+        #kassi liikumine   
         x1 = hiir.x - kass.x
         y1 = hiir.y - kass.y
         if abs(x1) >= abs(y1):
@@ -155,16 +169,6 @@ while run:
                 kass.y += keerukus
             elif y1 < 0 and kass.y - keerukus >= 0:
                 kass.y -= keerukus
-    #hiire liikumine
-    if game_active:
-        if lastKey == pygame.K_a and hiir.x - 35 >= 0: #vasak
-            hiir.x -= 35
-        if lastKey == pygame.K_d and hiir.x + 35 < WIDTH: #parem
-            hiir.x += 35
-        if lastKey == pygame.K_w and hiir.y - 35 >= 0: #üles
-            hiir.y -= 35
-        if lastKey == pygame.K_s and hiir.y + 35 < HEIGHT: #alla
-            hiir.y += 35
         
         counter = meiefont_tekst.render("Skoor: {0}".format(skoor), 1,(0, 0, 0)) #skoori lugeja
         draw_window(hiir,kass,juust,lastKey,counter)#joonista aknasse
@@ -172,7 +176,7 @@ while run:
     
     else:
         #intro ja gameover screenid
-        WIN.blit(intro_pilt,intro_pilt_rect)
+        WIN.blit(intro_pilt, intro_pilt_rect)
         skoori_näit_tekst = meiefont_kiri.render(" Said skooriks: "+str(skoor), 1,(255, 255, 255),(80, 79, 84))
         skoori_näit = skoori_näit_tekst.get_rect(center=(280, 280))
         WIN.blit(mängunimi_tekst,mängunimi)
@@ -182,12 +186,14 @@ while run:
             WIN.blit(raskusaste_tekst,raskusaste)
             mouse = pygame.mouse.get_pos()
             click = pygame.mouse.get_pressed()
+            #start nupp reaktsioon
             if click[0] == 1 and 245 <= mouse[0] <= 316 and 242 <= mouse[1] <= 279:
                 game_active = True
                 hiir = pygame.Rect(70, 70, 35, 35)
                 kass = pygame.Rect(490, 490, 70, 70)
                 skoor = 0
                 lastKey = 0
+            #juhend nupp reaktsioon
             elif click[0]==1 and 189 <= mouse[0] <= 371 and 332 <= mouse[1] <= 369:
                 juhend = True
             while juhend:
@@ -207,6 +213,7 @@ while run:
             WIN.blit(skoori_näit_tekst, skoori_näit)
             WIN.blit(gameover_tekst, gameover)
             WIN.blit(raskusaste_tekst,raskusaste)
+            #keerukus
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_0 or event.key == pygame.K_KP0:
